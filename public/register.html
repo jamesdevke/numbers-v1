@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Register - Jamestech</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="assets/style.css" rel="stylesheet" />
+</head>
+<body>
+  <div class="navbar">
+    <h1>🌐 Jamestech</h1>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="register.html">Register</a>
+      <a href="inbox.html">Inbox</a>
+      <a href="admin.html">Admin</a>
+    </div>
+    <div id="clock"></div>
+  </div>
+
+  <div class="form-container">
+    <h2>Register Fake WhatsApp Number</h2>
+    <p>Select a virtual number to receive OTP</p>
+
+    <form id="registerForm">
+      <label for="number">Choose Fake Number:</label>
+      <select id="number" name="number" required>
+        <option value="+254712345678">+254712345678 (Kenya)</option>
+        <option value="+12025550173">+12025550173 (US)</option>
+        <option value="+447911123456">+447911123456 (UK)</option>
+      </select>
+
+      <button type="submit" class="btn">Request OTP</button>
+    </form>
+
+    <p id="responseMsg"></p>
+  </div>
+
+  <script>
+    // Real-time Nairobi clock
+    function updateClock() {
+      const nairobiTime = new Date().toLocaleString("en-KE", { timeZone: "Africa/Nairobi" });
+      document.getElementById("clock").innerText = "🕒 Nairobi Time: " + nairobiTime;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // Handle registration form
+    document.getElementById("registerForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const number = document.getElementById("number").value;
+      const res = await fetch("/api/request-otp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ number })
+      });
+      const data = await res.json();
+      document.getElementById("responseMsg").innerText = data.message;
+    });
+  </script>
+</body>
+</html>

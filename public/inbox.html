@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Inbox - Jamestech</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="assets/style.css" rel="stylesheet" />
+</head>
+<body>
+  <div class="navbar">
+    <h1>🌐 Jamestech</h1>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="register.html">Register</a>
+      <a href="inbox.html">Inbox</a>
+      <a href="admin.html">Admin</a>
+    </div>
+    <div id="clock"></div>
+  </div>
+
+  <div class="form-container">
+    <h2>📥 Inbox - OTP Messages</h2>
+    <ul id="otpList"></ul>
+  </div>
+
+  <script>
+    function updateClock() {
+      const nairobiTime = new Date().toLocaleString("en-KE", { timeZone: "Africa/Nairobi" });
+      document.getElementById("clock").innerText = "🕒 Nairobi Time: " + nairobiTime;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // Fetch OTPs
+    async function loadOtps() {
+      const res = await fetch('/api/inbox');
+      const data = await res.json();
+      const list = document.getElementById('otpList');
+      list.innerHTML = data.map(d => `<li><strong>${d.number}</strong>: ${d.otp} <em>(${new Date(d.timestamp).toLocaleString()})</em></li>`).join('');
+    }
+    loadOtps();
+  </script>
+</body>
+</html>
